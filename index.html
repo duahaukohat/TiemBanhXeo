@@ -1,1 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiệm Bánh Xèo</title>
 
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff3d6;
+    color: #5a3218;
+    text-align: center;
+}
+
+.game {
+    max-width: 480px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 15px;
+}
+
+h1 {
+    margin: 8px 0;
+    font-size: 28px;
+}
+
+.status {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 12px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.customer {
+    background: #fff;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 8px #0002;
+}
+
+.customer-face {
+    font-size: 60px;
+}
+
+.order {
+    background: #fff0b8;
+    padding: 10px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.kitchen {
+    background: #f7d79b;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.pan {
+    width: 180px;
+    height: 100px;
+    margin: 10px auto 20px;
+    border-radius: 50%;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 45px;
+}
+
+.ingredients {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 5px;
+    font-size: 15px;
+    background: #fff;
+    color: #5a3218;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.main-button {
+    width: 100%;
+    margin-top: 15px;
+    background: #e88b32;
+    color: white;
+    font-size: 18px;
+}
+
+.progress {
+    width: 100%;
+    height: 20px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.bar {
+    width: 0%;
+    height: 100%;
+    background: #e85d35;
+    transition: width 0.2s;
+}
+
+.message {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.plate {
+    background: white;
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+    box-shadow: 0 3px 8px #0003;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+<h1>🥞 Tiệm Bánh Xèo</h1>
+
+<div class="status">
+    <span>💰 <span id="money">500</span>đ</span>
+    <span>⭐ Lv.1</span>
+</div>
+
+<div class="customer">
+    <div class="customer-face">🐱</div>
+    <div>“Cho mình 1 bánh xèo tôm thịt!”</div>
+
+    <div class="order">
+        🥞 Bánh xèo<br>
+        🦐 Tôm<br>
+        🥩 Thịt<br>
+        🥬 Giá
+    </div>
+</div>
+
+<div class="kitchen">
+
+    <h2 id="stage">1. Đổ bột</h2>
+
+    <div class="pan" id="pan">🍳</div>
+
+    <div class="ingredients">
+
+        <button onclick="addIngredient('🥞')">
+            🥞<br>Bột
+        </button>
+
+        <button onclick="addIngredient('🦐')">
+            🦐<br>Tôm
+        </button>
+
+        <button onclick="addIngredient('🥩')">
+            🥩<br>Thịt
+        </button>
+
+        <button onclick="addIngredient('🥬')">
+            🥬<br>Giá
+        </button>
+
+        <button onclick="addIngredient('🧅')">
+            🧅<br>Hành
+        </button>
+
+        <button onclick="addIngredient('🌶️')">
+            🌶️<br>Ớt
+        </button>
+
+    </div>
+
+    <button class="main-button" onclick="nextStep()" id="action">
+        🥞 ĐỔ BỘT
+    </button>
+
+    <div class="progress">
+        <div class="bar" id="bar"></div>
+    </div>
+
+    <div class="message" id="message">
+        Hãy bắt đầu làm bánh!
+    </div>
+
+</div>
+
+</div>
+
+<script>
+
+let step = 1;
+let money = 500;
+let ingredients = [];
+
+function addIngredient(item) {
+
+    if (step < 2) {
+        document.getElementById("message").innerText =
+            "Hãy đổ bột trước!";
+        return;
+    }
+
+    ingredients.push(item);
+
+    document.getElementById("pan").innerText =
+        ingredients.join("");
+
+    document.getElementById("message").innerText =
+        "Đã thêm " + item;
+}
+
+function nextStep() {
+
+    if (step === 1) {
+
+        step = 2;
+
+        document.getElementById("stage").innerText =
+            "2. Thêm topping";
+
+        document.getElementById("action").innerText =
+            "🔥 CHIÊN";
+
+        document.getElementById("message").innerText =
+            "Thêm tôm, thịt và giá!";
+
+    }
+
+    else if (step === 2) {
+
+        step = 3;
+
+        document.getElementById("stage").innerText =
+            "3. Đang chiên...";
+
+        document.getElementById("action").disabled = true;
+
+        let progress = 0;
+
+        let timer = setInterval(function() {
+
+            progress += 5;
+
+            document.getElementById("bar").style.width =
+                progress + "%";
+
+            if (progress >= 100) {
+
+                clearInterval(timer);
+
+                step = 4;
+
+                document.getElementById("stage").innerText =
+                    "4. Để bánh ra dĩa";
+
+                document.getElementById("action").disabled =
+                    false;
+
+                document.getElementById("action").innerText =
+                    "🍽️ ĐỂ RA DĨA";
+
+                document.getElementById("pan").innerText =
+                    "🥞";
+
+                document.getElementById("message").innerText =
+                    "Bánh chín rồi!";
+            }
+
+        }, 100);
+
+    }
+
+    else if (step === 4) {
+
+        step = 5;
+
+        document.getElementById("stage").innerText =
+            "5. Thêm đồ ăn kèm";
+
+        document.getElementById("pan").className =
+            "plate";
+
+        document.getElementById("pan").innerText =
+            "🥞";
+
+        document.getElementById("action").innerText =
+            "🥬 THÊM RAU";
+
+        document.getElementById("message").innerText =
+            "Thêm rau sống và nước chấm!";
+
+    }
+
+    else if (step === 5) {
+
+        step = 6;
+
+        document.getElementById("stage").innerText =
+            "6. Phục vụ khách";
+
+        document.getElementById("pan").innerText =
+            "🥞🥬🥣";
+
+        document.getElementById("action").innerText =
+            "🍽️ ĐƯA KHÁCH";
+
+        document.getElementById("message").innerText =
+            "Món ăn đã hoàn thành!";
+    }
+
+    else if (step === 6) {
+
+        step = 7;
+
+        money += 50000;
+
+        document.getElementById("money").innerText =
+            money;
+
+        document.getElementById("stage").innerText =
+            "✨ Hoàn thành!";
+
+        document.getElementById("action").innerText =
+            "🐱 KHÁCH ĂN";
+
+        document.getElementById("message").innerText =
+            "+50.000đ 💰 Khách rất hài lòng!";
+
+        document.getElementById("action").disabled = true;
+    }
+}
+
+</script>
+
+</body>
+</html>
