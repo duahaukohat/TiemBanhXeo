@@ -1,9 +1,13 @@
 let money = 500;
 let step = 0;
 
+let waitTime = 60;
+let waitTimer = null;
+
+let ingredientsInPan = [];
+
 const stages = [
-    "Khách đang đến...",
-    "Khách đã gọi món!",
+    "Khách đang gọi món...",
     "Đổ bột vào chảo",
     "Thêm topping",
     "Chiên bánh",
@@ -12,121 +16,201 @@ const stages = [
     "Đưa bánh cho khách"
 ];
 
-const actionTexts = [
-    "👋 ĐÓN KHÁCH",
-    "📝 XEM ORDER",
-    "🥞 ĐỔ BỘT",
-    "🦐 THÊM TOPPING",
-    "🔥 CHIÊN",
-    "🍽️ ĐỂ RA DĨA",
-    "🥬 THÊM ĐỒ ĂN KÈM",
-    "🐱 PHỤC VỤ"
-];
-
 function updateGame() {
+
     const stage = document.getElementById("stage");
     const action = document.getElementById("action");
     const message = document.getElementById("message");
 
     stage.innerText = stages[step];
-    action.innerText = actionTexts[step];
 
     if (step === 0) {
-        message.innerText = "Có khách đang bước vào tiệm!";
+        action.innerText = "🥞 ĐỔ BỘT";
+        message.innerText = "Khách đã gọi món!";
     }
 
     if (step === 1) {
-        message.innerText = "Khách muốn bánh xèo tôm thịt.";
+        action.innerText = "🦐 THÊM TOPPING";
+        message.innerText = "Bấm topping để cho vào chảo.";
     }
 
     if (step === 2) {
-        message.innerText = "Hãy đổ bột vào chảo.";
+        action.innerText = "🔥 CHIÊN BÁNH";
+        message.innerText = "Đủ topping rồi! Bắt đầu chiên.";
     }
 
     if (step === 3) {
-        message.innerText = "Cho tôm, thịt và giá vào bánh.";
+        action.innerText = "🍽️ ĐỂ RA DĨA";
+        message.innerText = "Bánh đã chín!";
     }
 
     if (step === 4) {
-        message.innerText = "Đang chiên bánh...";
+        action.innerText = "🥬 THÊM ĐỒ ĂN KÈM";
+        message.innerText = "Thêm rau và nước chấm.";
     }
 
     if (step === 5) {
-        message.innerText = "Bánh đã chín! Cho ra dĩa.";
-    }
-
-    if (step === 6) {
-        message.innerText = "Thêm rau sống và nước chấm.";
-    }
-
-    if (step === 7) {
+        action.innerText = "🐱 PHỤC VỤ";
         message.innerText = "Đưa bánh cho khách!";
     }
 }
 
-function nextStep() {
 
-    if (step === 4) {
-        cookBanhXeo();
-        return;
-    }
+function startWaiting() {
 
-    if (step < 7) {
-        step++;
-        updateGame();
-    } else {
-        receiveMoney();
-    }
-}
+    clearInterval(waitTimer);
 
-function cookBanhXeo() {
+    waitTime = 60;
 
-    const bar = document.getElementById("bar");
-    const action = document.getElementById("action");
-    const message = document.getElementById("message");
+    const timeText = document.getElementById("waitTime");
+    const waitBar = document.getElementById("waitBar");
 
-    action.disabled = true;
-    message.innerText = "🔥 Đang chiên bánh...";
+    timeText.innerText = waitTime;
+    waitBar.style.width = "100%";
 
-    let progress = 0;
+    waitTimer = setInterval(() => {
 
-    const timer = setInterval(() => {
+        waitTime--;
 
-        progress += 5;
-        bar.style.width = progress + "%";
+        timeText.innerText = waitTime;
 
-        if (progress >= 100) {
+        waitBar.style.width =
+            (waitTime / 60 * 100) + "%";
 
-            clearInterval(timer);
-
-            action.disabled = false;
-            step = 5;
-
-            document.getElementById("pan").innerText = "🥞";
-
-            updateGame();
+        if (waitTime <= 30) {
+            waitBar.style.background = "#f5a623";
         }
 
-    }, 120);
+        if (waitTime <= 10) {
+            waitBar.style.background = "#e53935";
+        }
+
+        if (waitTime <= 0) {
+
+            clearInterval(waitTimer);
+
+            customerLeaves();
+        }
+
+    }, 1000);
 }
 
-function receiveMoney() {
 
-    money += 50000;
-
-    document.getElementById("money").innerText =
-        money.toLocaleString("vi-VN");
+function customerLeaves() {
 
     document.getElementById("stage").innerText =
-        "✨ Khách đã thanh toán!";
+        "💨 Khách đã rời đi!";
 
     document.getElementById("message").innerText =
-        "+50.000đ 💰 Khách rất hài lòng!";
+        "Khách chờ quá lâu nên bỏ đi 😭";
 
     document.getElementById("action").innerText =
-        "🐱 KHÁCH RỜI TIỆM";
+        "❌ HẾT GIỜ";
 
     document.getElementById("action").disabled = true;
 }
 
-updateGame();
+
+function nextStep() {
+
+    if (waitTime <= 0) {
+        return;
+    }
+
+    if (step === 0) {
+
+        ingredientsInPan = ["🥞"];
+
+        document.getElementById("pan").innerText =
+            "🥞";
+
+        step = 1;
+
+        updateGame();
+
+        return;
+    }
+
+    if (step === 1) {
+
+        document.getElementById("message").innerText =
+            "Hãy bấm topping bên dưới.";
+
+        return;
+    }
+
+    if (step === 2) {
+
+        cookBanhXeo();
+
+        return;
+    }
+
+    if (step === 3) {
+
+        document.getElementById("pan").innerText =
+            "🍽️ 🥞";
+
+        step = 4;
+
+        updateGame();
+
+        return;
+    }
+
+    if (step === 4) {
+
+        document.getElementById("pan").innerText =
+            "🥞 🥬 🥣";
+
+        step = 5;
+
+        updateGame();
+
+        return;
+    }
+
+    if (step === 5) {
+
+        receiveMoney();
+
+    }
+}
+
+
+function addIngredient(ingredient) {
+
+    if (step !== 1) {
+        return;
+    }
+
+    ingredientsInPan.push(ingredient);
+
+    document.getElementById("pan").innerText =
+        ingredientsInPan.join(" ");
+
+    checkOrder();
+}
+
+
+function checkOrder() {
+
+    const hasShrimp =
+        ingredientsInPan.includes("🦐");
+
+    const hasMeat =
+        ingredientsInPan.includes("🥩");
+
+    if (hasShrimp && hasMeat) {
+
+        step = 2;
+
+        updateGame();
+
+    }
+}
+
+
+function cookBanhXeo() {
+
+    const bar = document.getElementById("
