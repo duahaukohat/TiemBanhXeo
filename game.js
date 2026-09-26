@@ -1,60 +1,209 @@
 let money = 500;
-let step = 0;
 
 let waitTime = 60;
+
 let waitTimer = null;
+
+let cookingTimer = null;
+
+let step = 0;
+
+let currentBanh = 0;
+
+let order = [];
 
 let ingredientsInPan = [];
 
-const stages = [
-    "Khách đang gọi món...",
-    "Đổ bột vào chảo",
-    "Thêm topping",
-    "Chiên bánh",
-    "Để bánh ra dĩa",
-    "Thêm rau và nước chấm",
-    "Đưa bánh cho khách"
-];
+
+/* =========================
+   TẠO ORDER
+========================= */
+
+function createOrder() {
+
+    const twoBanh =
+        Math.random() < 0.5;
+
+    if (twoBanh) {
+
+        order = [
+            ["🦐", "🥩"],
+            ["🦐", "🦑"]
+        ];
+
+    } else {
+
+        order = [
+            ["🦐", "🥩"]
+        ];
+
+    }
+
+    showOrder();
+}
+
+
+/* =========================
+   HIỂN THỊ ORDER
+========================= */
+
+function showOrder() {
+
+    const orderText =
+        document.getElementById("orderText");
+
+    let text =
+        "Cho mình order ";
+
+    order.forEach((banh, index) => {
+
+        if (index > 0) {
+
+            text += ", ";
+
+        }
+
+        text +=
+            (index + 1) +
+            " bánh xèo ";
+
+        if (
+            banh.includes("🦐") &&
+            banh.includes("🥩")
+        ) {
+
+            text +=
+                '<span class="topping">' +
+                'tôm thịt' +
+                '</span>';
+
+        }
+
+        else if (
+            banh.includes("🦐") &&
+            banh.includes("🦑")
+        ) {
+
+            text +=
+                '<span class="topping">' +
+                'tôm mực' +
+                '</span>';
+
+        }
+
+    });
+
+
+    orderText.innerHTML = text;
+}
+
+
+/* =========================
+   HIỂN THỊ GAME
+========================= */
 
 function updateGame() {
 
-    const stage = document.getElementById("stage");
-    const action = document.getElementById("action");
-    const message = document.getElementById("message");
+    const stage =
+        document.getElementById("stage");
 
-    stage.innerText = stages[step];
+    const action =
+        document.getElementById("action");
+
+    const message =
+        document.getElementById("message");
+
 
     if (step === 0) {
-        action.innerText = "🥞 ĐỔ BỘT";
-        message.innerText = "Khách đã gọi món!";
+
+        stage.innerText =
+            "Chuẩn bị bánh " +
+            (currentBanh + 1);
+
+        action.innerText =
+            "🥞 ĐỔ BỘT";
+
+        message.innerText =
+            "Bấm Bột để bắt đầu bánh.";
+
     }
+
 
     if (step === 1) {
-        action.innerText = "🦐 THÊM TOPPING";
-        message.innerText = "Bấm topping để cho vào chảo.";
+
+        stage.innerText =
+            "Thêm topping";
+
+        action.innerText =
+            "🔥 CHIÊN BÁNH";
+
+        message.innerText =
+            "Bấm đúng topping khách đã gọi.";
+
     }
+
 
     if (step === 2) {
-        action.innerText = "🔥 CHIÊN BÁNH";
-        message.innerText = "Đủ topping rồi! Bắt đầu chiên.";
+
+        stage.innerText =
+            "🔥 Đang chiên bánh";
+
+        action.innerText =
+            "🔥 ĐANG CHIÊN";
+
+        message.innerText =
+            "Đợi bánh chín...";
+
     }
+
 
     if (step === 3) {
-        action.innerText = "🍽️ ĐỂ RA DĨA";
-        message.innerText = "Bánh đã chín!";
+
+        stage.innerText =
+            "Bánh đã chín!";
+
+        action.innerText =
+            "🍽️ ĐỂ RA DĨA";
+
+        message.innerText =
+            "Đưa bánh ra dĩa.";
+
     }
+
 
     if (step === 4) {
-        action.innerText = "🥬 THÊM ĐỒ ĂN KÈM";
-        message.innerText = "Thêm rau và nước chấm.";
+
+        stage.innerText =
+            "Thêm đồ ăn kèm";
+
+        action.innerText =
+            "🥬 THÊM RAU & NƯỚC CHẤM";
+
+        message.innerText =
+            "Thêm rau và nước chấm.";
+
     }
+
 
     if (step === 5) {
-        action.innerText = "🐱 PHỤC VỤ";
-        message.innerText = "Đưa bánh cho khách!";
+
+        stage.innerText =
+            "Hoàn thành món!";
+
+        action.innerText =
+            "🐱 PHỤC VỤ";
+
+        message.innerText =
+            "Đưa bánh cho khách.";
+
     }
+
 }
 
+
+/* =========================
+   TIMER KHÁCH CHỜ
+========================= */
 
 function startWaiting() {
 
@@ -62,155 +211,545 @@ function startWaiting() {
 
     waitTime = 60;
 
-    const timeText = document.getElementById("waitTime");
-    const waitBar = document.getElementById("waitBar");
+    const timeText =
+        document.getElementById("waitTime");
 
-    timeText.innerText = waitTime;
-    waitBar.style.width = "100%";
+    const waitBar =
+        document.getElementById("waitBar");
+
+
+    timeText.innerText =
+        waitTime;
+
+    waitBar.style.width =
+        "100%";
+
+    waitBar.style.background =
+        "#55a630";
+
 
     waitTimer = setInterval(() => {
 
         waitTime--;
 
-        timeText.innerText = waitTime;
+        timeText.innerText =
+            waitTime;
+
 
         waitBar.style.width =
-            (waitTime / 60 * 100) + "%";
+            (waitTime / 60 * 100) +
+            "%";
+
 
         if (waitTime <= 30) {
-            waitBar.style.background = "#f5a623";
+
+            waitBar.style.background =
+                "#f5a623";
+
         }
 
+
         if (waitTime <= 10) {
-            waitBar.style.background = "#e53935";
+
+            waitBar.style.background =
+                "#e53935";
+
         }
+
 
         if (waitTime <= 0) {
 
             clearInterval(waitTimer);
 
+            clearInterval(cookingTimer);
+
             customerLeaves();
+
         }
 
     }, 1000);
+
 }
 
+
+/* =========================
+   KHÁCH BỎ ĐI
+========================= */
 
 function customerLeaves() {
 
-    document.getElementById("stage").innerText =
+    document.getElementById("stage")
+        .innerText =
         "💨 Khách đã rời đi!";
 
-    document.getElementById("message").innerText =
+
+    document.getElementById("message")
+        .innerText =
         "Khách chờ quá lâu nên bỏ đi 😭";
 
-    document.getElementById("action").innerText =
+
+    document.getElementById("action")
+        .innerText =
         "❌ HẾT GIỜ";
 
-    document.getElementById("action").disabled = true;
+
+    document.getElementById("action")
+        .disabled = true;
+
+
+    disableIngredients();
 }
 
 
-function nextStep() {
+/* =========================
+   BẤM NGUYÊN LIỆU
+========================= */
+
+function addIngredient(ingredient) {
 
     if (waitTime <= 0) {
+
         return;
+
     }
 
-    if (step === 0) {
+
+    if (step !== 0 && step !== 1) {
+
+        return;
+
+    }
+
+
+    /* BỘT */
+
+    if (ingredient === "🥞") {
+
+        if (step !== 0) {
+
+            return;
+
+        }
+
 
         ingredientsInPan = ["🥞"];
 
-        document.getElementById("pan").innerText =
+
+        document.getElementById("pan")
+            .innerText =
             "🥞";
+
 
         step = 1;
 
         updateGame();
 
         return;
+
     }
+
+
+    /* TOPPING */
+
+    if (step !== 1) {
+
+        return;
+
+    }
+
+
+    const required =
+        order[currentBanh];
+
+
+    if (!required.includes(ingredient)) {
+
+        document.getElementById("message")
+            .innerText =
+            "❌ Khách không gọi topping này!";
+
+        return;
+
+    }
+
+
+    if (ingredientsInPan.includes(ingredient)) {
+
+        return;
+
+    }
+
+
+    ingredientsInPan.push(ingredient);
+
+
+    document.getElementById("pan")
+        .innerText =
+        ingredientsInPan.join(" ");
+
+
+    checkToppings();
+
+}
+
+
+/* =========================
+   KIỂM TRA TOPPING
+========================= */
+
+function checkToppings() {
+
+    const required =
+        order[currentBanh];
+
+
+    const allDone =
+        required.every(item =>
+            ingredientsInPan.includes(item)
+        );
+
+
+    if (allDone) {
+
+        document.getElementById("message")
+            .innerText =
+            "✅ Đủ topping! Bấm CHIÊN.";
+
+    }
+
+}
+
+
+/* =========================
+   NÚT CHÍNH
+========================= */
+
+function nextStep() {
+
+    if (waitTime <= 0) {
+
+        return;
+
+    }
+
+
+    /* ĐỔ BỘT */
+
+    if (step === 0) {
+
+        addIngredient("🥞");
+
+        return;
+
+    }
+
+
+    /* TOPPING */
 
     if (step === 1) {
 
-        document.getElementById("message").innerText =
-            "Hãy bấm topping bên dưới.";
+        const required =
+            order[currentBanh];
 
-        return;
-    }
 
-    if (step === 2) {
+        const allDone =
+            required.every(item =>
+                ingredientsInPan.includes(item)
+            );
+
+
+        if (!allDone) {
+
+            document.getElementById("message")
+                .innerText =
+                "⚠️ Chưa đủ topping!";
+
+            return;
+
+        }
+
 
         cookBanhXeo();
 
         return;
+
     }
+
+
+    /* ĐANG CHIÊN */
+
+    if (step === 2) {
+
+        return;
+
+    }
+
+
+    /* ĐỂ RA DĨA */
 
     if (step === 3) {
 
-        document.getElementById("pan").innerText =
-            "🍽️ 🥞";
-
-        step = 4;
-
-        updateGame();
+        putOnPlate();
 
         return;
+
     }
+
+
+    /* RAU + NƯỚC CHẤM */
 
     if (step === 4) {
 
-        document.getElementById("pan").innerText =
-            "🥞 🥬 🥣";
-
-        step = 5;
-
-        updateGame();
+        addSideDishes();
 
         return;
+
     }
+
+
+    /* PHỤC VỤ */
 
     if (step === 5) {
 
-        receiveMoney();
+        serveCustomer();
 
-    }
-}
-
-
-function addIngredient(ingredient) {
-
-    if (step !== 1) {
         return;
+
     }
 
-    ingredientsInPan.push(ingredient);
-
-    document.getElementById("pan").innerText =
-        ingredientsInPan.join(" ");
-
-    checkOrder();
 }
 
 
-function checkOrder() {
-
-    const hasShrimp =
-        ingredientsInPan.includes("🦐");
-
-    const hasMeat =
-        ingredientsInPan.includes("🥩");
-
-    if (hasShrimp && hasMeat) {
-
-        step = 2;
-
-        updateGame();
-
-    }
-}
-
+/* =========================
+   CHIÊN BÁNH 10 GIÂY
+========================= */
 
 function cookBanhXeo() {
 
-    const bar = document.getElementById("
+    const bar =
+        document.getElementById("bar");
+
+    const action =
+        document.getElementById("action");
+
+    const message =
+        document.getElementById("message");
+
+
+    action.disabled = true;
+
+
+    disableIngredients();
+
+
+    step = 2;
+
+    updateGame();
+
+
+    let progress = 0;
+
+
+    bar.style.width =
+        "0%";
+
+
+    cookingTimer =
+        setInterval(() => {
+
+            progress += 10;
+
+
+            bar.style.width =
+                progress + "%";
+
+
+            if (progress >= 100) {
+
+                clearInterval(cookingTimer);
+
+
+                action.disabled = false;
+
+
+                step = 3;
+
+
+                document.getElementById("pan")
+                    .innerText =
+                    "🥞✨";
+
+
+                updateGame();
+
+            }
+
+        }, 1000);
+
+}
+
+
+/* =========================
+   ĐỂ BÁNH RA DĨA
+========================= */
+
+function putOnPlate() {
+
+    document.getElementById("pan")
+        .innerText =
+        "🍽️ 🥞";
+
+
+    currentBanh++;
+
+
+    if (currentBanh < order.length) {
+
+        ingredientsInPan = [];
+
+        step = 0;
+
+
+        document.getElementById("pan")
+            .innerText =
+            "🍳";
+
+
+        enableIngredients();
+
+
+        document.getElementById("bar")
+            .style.width =
+            "0%";
+
+
+        updateGame();
+
+
+        return;
+
+    }
+
+
+    step = 4;
+
+
+    updateGame();
+
+}
+
+
+/* =========================
+   THÊM RAU + NƯỚC CHẤM
+========================= */
+
+function addSideDishes() {
+
+    document.getElementById("pan")
+        .innerText =
+        "🍽️ 🥞 🥬 🥣";
+
+
+    step = 5;
+
+
+    updateGame();
+
+}
+
+
+/* =========================
+   PHỤC VỤ KHÁCH
+========================= */
+
+function serveCustomer() {
+
+    clearInterval(waitTimer);
+
+
+    step = 6;
+
+
+    document.getElementById("stage")
+        .innerText =
+        "✨ Khách đã nhận bánh!";
+
+
+    document.getElementById("message")
+        .innerText =
+        "+50.000đ 💰 Khách rất hài lòng!";
+
+
+    money += 50000;
+
+
+    document.getElementById("money")
+        .innerText =
+        money.toLocaleString("vi-VN");
+
+
+    document.getElementById("action")
+        .innerText =
+        "🐱 KHÁCH ĐÃ THANH TOÁN";
+
+
+    document.getElementById("action")
+        .disabled = true;
+
+
+    disableIngredients();
+
+}
+
+
+/* =========================
+   KHÓA NGUYÊN LIỆU
+========================= */
+
+function disableIngredients() {
+
+    const buttons =
+        document.querySelectorAll(
+            ".ingredients button"
+        );
+
+
+    buttons.forEach(button => {
+
+        button.disabled = true;
+
+    });
+
+}
+
+
+/* =========================
+   MỞ NGUYÊN LIỆU
+========================= */
+
+function enableIngredients() {
+
+    const buttons =
+        document.querySelectorAll(
+            ".ingredients button"
+        );
+
+
+    buttons.forEach(button => {
+
+        button.disabled = false;
+
+    });
+
+}
+
+
+/* =========================
+   BẮT ĐẦU GAME
+========================= */
+
+createOrder();
+
+updateGame();
+
+startWaiting();
