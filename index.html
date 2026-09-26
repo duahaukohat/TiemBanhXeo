@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <title>Tiệm Bánh Xèo</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
@@ -16,13 +21,21 @@
 
     <h1>🥞 Tiệm Bánh Xèo</h1>
 
+
     <div class="status">
-        <span>💰 <span id="money">500</span>đ</span>
-        <span>⭐ Lv.1</span>
+
+        <span>
+            💰 <span id="money">500</span>đ
+        </span>
+
+        <span>
+            ⭐ Lv.1
+        </span>
+
     </div>
 
 
-    <!-- TIỆM -->
+    <!-- KHÁCH -->
 
     <div class="shop">
 
@@ -30,23 +43,42 @@
             🏪 TIỆM BÁNH XÈO
         </div>
 
-        <div class="customer" id="customer">
-            🐱
+
+        <div class="customer-area">
+
+            <div class="customer" id="customer">
+                🐱
+            </div>
+
+
+            <div class="speech-bubble">
+
+                <div id="orderText">
+                    Cho mình order
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="table"></div>
+
+        <div class="waiting">
+
+            Khách chờ:
+            <span id="waitTime">60</span>s
+
+            <div class="wait-progress">
+
+                <div
+                    class="wait-bar"
+                    id="waitBar">
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
-
-
-    <!-- ORDER -->
-
-    <div class="order">
-
-        <div class="speech-bubble">
-    Cho mình order bánh xèo
-    <span class="topping">1 tôm thịt</span>
-        </div>
 
 
     <!-- BẾP -->
@@ -54,7 +86,7 @@
     <div class="kitchen">
 
         <h2 id="stage">
-            Khách đang đến...
+            Chuẩn bị làm bánh
         </h2>
 
 
@@ -65,29 +97,56 @@
 
         <div class="ingredients">
 
-            <button onclick="addIngredient('🥞')">
-                🥞<br>Bột
+
+            <button
+                onclick="addIngredient('🥞')">
+
+                🥞
+                <br>
+                Bột
+
             </button>
 
-            <button onclick="addIngredient('🦐')">
-                🦐<br>Tôm
+
+            <button
+                onclick="addIngredient('🦐')">
+
+                🦐
+                <br>
+                Tôm
+
             </button>
 
-            <button onclick="addIngredient('🥩')">
-                🥩<br>Thịt
+
+            <button
+                onclick="addIngredient('🥩')">
+
+                🥩
+                <br>
+                Thịt
+
             </button>
 
-            <button onclick="addIngredient('🥬')">
-                🥬<br>Giá
+
+            <button
+                onclick="addIngredient('🦑')">
+
+                🦑
+                <br>
+                Mực
+
             </button>
 
-            <button onclick="addIngredient('🌿')">
-                🌿<br>Rau
+
+            <button
+                onclick="addIngredient('🥬')">
+
+                🥬
+                <br>
+                Giá
+
             </button>
 
-            <button onclick="addIngredient('🥣')">
-                🥣<br>Nước chấm
-            </button>
 
         </div>
 
@@ -97,7 +156,7 @@
             id="action"
             onclick="nextStep()">
 
-            👋 ĐÓN KHÁCH
+            🥞 ĐỔ BỘT
 
         </button>
 
@@ -116,7 +175,7 @@
             class="message"
             id="message">
 
-            Có khách đang bước vào tiệm!
+            Khách đang chờ món!
 
         </div>
 
@@ -128,4 +187,5 @@
 <script src="game.js"></script>
 
 </body>
+
 </html>
