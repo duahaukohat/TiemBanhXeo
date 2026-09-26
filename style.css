@@ -93,3 +93,30 @@ h1 {
 
 .pan {
     width: 180
+
+.topping {
+    font-weight: bold;
+    color: red;
+}
+
+.waiting {
+    margin-top: 12px;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.wait-progress {
+    width: 100%;
+    height: 14px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.wait-bar {
+    width: 100%;
+    height: 100%;
+    background: #55a630;
+    transition: width 1s linear, background 0.3s;
+}
