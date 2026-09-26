@@ -1,0 +1,95 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff3d6;
+    color: #5a3218;
+    text-align: center;
+}
+
+.game {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 15px;
+}
+
+h1 {
+    margin: 8px 0 15px;
+    font-size: 28px;
+}
+
+.status {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 12px 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px #0002;
+}
+
+.shop {
+    position: relative;
+    background: #f5d49a;
+    border-radius: 20px;
+    padding: 20px 15px;
+    min-height: 220px;
+    overflow: hidden;
+}
+
+.shop-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.table {
+    background: #9b633c;
+    width: 150px;
+    height: 65px;
+    border-radius: 12px;
+    margin: 65px auto 0;
+    position: relative;
+}
+
+.customer {
+    position: absolute;
+    font-size: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 70px;
+    transition: all 1s ease;
+}
+
+.customer.arrived {
+    top: 80px;
+}
+
+.order {
+    background: #fff;
+    border-radius: 15px;
+    padding: 12px;
+    margin-top: 15px;
+    box-shadow: 0 2px 6px #0002;
+    font-size: 17px;
+}
+
+.order-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.kitchen {
+    background: #f7d79b;
+    border-radius: 20px;
+    padding: 20px 15px;
+    margin-top: 15px;
+}
+
+.pan {
+    width: 180
